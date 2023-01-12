@@ -1,0 +1,12 @@
+﻿{
+  "profiles": {
+    "FleaMarket.Api": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7185;http://localhost:5233",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
