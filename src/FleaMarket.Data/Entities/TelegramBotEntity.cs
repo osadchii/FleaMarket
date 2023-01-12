@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FleaMarket.Data.Constants;
-using FleaMarket.Data.Enums;
 
 namespace FleaMarket.Data.Entities;
 
@@ -12,9 +11,6 @@ public class TelegramBotEntity : BaseEntity
     [Required]
     [MaxLength(DatabaseLimit.TelegramBotToken)]
     public string Token { get; set; }
-
-    [Required] 
-    public TelegramBotType Type { get; set; }
 
     [Required]
     [DefaultValue(false)]

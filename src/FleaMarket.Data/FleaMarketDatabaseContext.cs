@@ -1,8 +1,6 @@
 ﻿using FleaMarket.Data.Entities;
-using FleaMarket.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FleaMarket.Data;
 
@@ -34,10 +32,6 @@ public sealed class FleaMarketDatabaseContext : DbContext
             
             entity
                 .HasIndex(x => x.OwnerId);
-            
-            entity
-                .Property(x => x.Type)
-                .HasConversion(new EnumToStringConverter<TelegramBotType>());
         });
 
         base.OnModelCreating(modelBuilder);
