@@ -66,7 +66,6 @@ public static class FleaMarketConfigurator
                 
                 diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
                 diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
-                diagnosticContext.Set("TraceId", Guid.NewGuid());
                 diagnosticContext.Set("RoutePattern", endpointPattern);
             };
         });
