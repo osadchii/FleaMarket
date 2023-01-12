@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using FleaMarket.Infrastructure.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Serilog;
@@ -28,6 +29,9 @@ public static class FleaMarketConfigurator
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
+        
+        builder.Services
+            .AddServices();
 
         builder.Host
             .UseSerilog((context, services, configuration) => configuration
@@ -38,7 +42,7 @@ public static class FleaMarketConfigurator
                 .Enrich
                 .FromLogContext()
                 .WriteTo
-#if !DEBUG
+#if DEBUG
                 .Console()
 #else
                 .Console(new Serilog.Formatting.Compact.RenderedCompactJsonFormatter())
