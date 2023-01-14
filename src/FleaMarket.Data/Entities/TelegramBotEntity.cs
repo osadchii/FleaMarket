@@ -16,8 +16,9 @@ public class TelegramBotEntity : BaseEntity
     [DefaultValue(false)]
     public bool IsActive { get; set; }
 
+    [Required]
     [ForeignKey(nameof(TelegramUserEntity))]
-    public Guid? OwnerId { get; set; }
+    public Guid OwnerId { get; set; }
 
     public TelegramUserEntity Owner { get; set; }
 }

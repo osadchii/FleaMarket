@@ -1,10 +1,10 @@
 using FleaMarket.Data;
 using FleaMarket.Data.Constants;
 using FleaMarket.Infrastructure.Configurations;
+using FleaMarket.Infrastructure.Telegram.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Telegram.Bot;
 
 namespace FleaMarket.Infrastructure.Services;
 
@@ -18,32 +18,30 @@ public interface IWebhookService
 
 public class WebhookService : IWebhookService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IFleaMarketTelegramBotClient _telegramBotClient;
     private readonly FleaMarketDatabaseContext _context;
     private readonly ILogger<WebhookService> _logger;
     private readonly IOptions<ApplicationConfiguration> _options;
 
-    public WebhookService(HttpClient httpClient, FleaMarketDatabaseContext context, ILogger<WebhookService> logger,
-        IOptions<ApplicationConfiguration> options)
+    public WebhookService(FleaMarketDatabaseContext context, ILogger<WebhookService> logger,
+        IOptions<ApplicationConfiguration> options, IFleaMarketTelegramBotClient telegramBotClient)
     {
-        _httpClient = httpClient;
         _context = context;
         _logger = logger;
         _options = options;
+        _telegramBotClient = telegramBotClient;
     }
 
     public async Task SetWebhook(string token)
     {
-        var telegramBot = new TelegramBotClient(token, _httpClient);
         var webhookAddress = @$"{_options.Value.Host}/{ApplicationConstant.TelegramController}/{token}";
-        await telegramBot.SetWebhookAsync(webhookAddress);
+        await _telegramBotClient.SetWebhook(token, webhookAddress);
         _logger.LogInformation("Webhook for telegram bot with token '{Token}' has been set", token);
     }
 
     public async Task DeleteWebhook(string token)
     {
-        var telegramBot = new TelegramBotClient(token, _httpClient);
-        await telegramBot.DeleteWebhookAsync();
+        await _telegramBotClient.DeleteWebhook(token);
         _logger.LogInformation("Webhook for telegram bot with token '{Token}' has been deleted", token);
     }
 

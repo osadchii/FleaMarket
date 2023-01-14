@@ -2,21 +2,26 @@
 using FleaMarket.Infrastructure.Configurations;
 using FleaMarket.Infrastructure.HostedServices;
 using FleaMarket.Infrastructure.Services;
+using FleaMarket.Infrastructure.Telegram;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Serilog;
+using Environment = FleaMarket.Infrastructure.Constants.Environment;
 
 namespace FleaMarket.Api;
 
 public static class FleaMarketConfigurator
 {
-    public static WebApplicationBuilder WebApplicationBuilder(string[] args, bool testEnvironment = false)
+    public static WebApplicationBuilder WebApplicationBuilder(string[] args)
     {
-        ConfigureLogging(testEnvironment);
-
         var builder = WebApplication.CreateBuilder(args);
+
+        if (builder.Environment.EnvironmentName != Environment.Test)
+        {
+            ConfigureLogging();
+        }
 
         builder.Configuration
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -45,9 +50,15 @@ public static class FleaMarketConfigurator
 
         builder.Services
             .AddServices();
+
+        if (builder.Environment.EnvironmentName != Environment.Test)
+        {
+            builder.Services
+                .AddHostedServices();
+        }
         
         builder.Services
-            .AddHostedServices();
+            .AddFleaMarketTelegramBot();
 
         builder.Services
             .Configure<ApplicationConfiguration>(builder.Configuration
@@ -72,7 +83,7 @@ public static class FleaMarketConfigurator
         return builder;
     }
 
-    public static WebApplication FleaMarketApplication(WebApplicationBuilder builder, bool testEnvironment = false)
+    public static WebApplication FleaMarketApplication(WebApplicationBuilder builder)
     {
         var application = builder.Build();
 
@@ -101,7 +112,7 @@ public static class FleaMarketConfigurator
         return application;
     }
 
-    private static void ConfigureLogging(bool testEnvironment = false)
+    private static void ConfigureLogging()
     {
         var loggerConfiguration = new LoggerConfiguration();
         loggerConfiguration
