@@ -50,6 +50,7 @@ public class WebhookService : IWebhookService
         await SetWebhook(_options.Value.ManagementBot.Token);
         
         var telegramBots = await _context.TelegramBots
+            .AsNoTracking()
             .Where(x => x.IsActive)
             .Select(x => x.Token)
             .ToListAsync();
@@ -65,6 +66,7 @@ public class WebhookService : IWebhookService
         await DeleteWebhook(_options.Value.ManagementBot.Token);
         
         var telegramBots = await _context.TelegramBots
+            .AsNoTracking()
             .Where(x => x.IsActive)
             .Select(x => x.Token)
             .ToListAsync();
