@@ -5,6 +5,9 @@ var app = FleaMarketConfigurator.FleaMarketApplication(builder);
 
 app.Run();
 
-public partial class Program
+namespace FleaMarket.Api
 {
+    public partial class Program
+    {
+    }
 }

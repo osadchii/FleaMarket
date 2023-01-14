@@ -1,4 +1,5 @@
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace FleaMarket.Infrastructure.Telegram.Client;
 
@@ -21,5 +22,13 @@ public class FleaMarketTelegramBotClient : IFleaMarketTelegramBotClient
     {
         var telegramBotClient = new TelegramBotClient(token, _httpClient);
         return telegramBotClient.DeleteWebhookAsync();
+    }
+
+    public async Task SendTextMessage(string token, long chatId, string text)
+    {
+        var telegramBotClient = new TelegramBotClient(token, _httpClient);
+        await telegramBotClient.SendChatActionAsync(chatId, ChatAction.Typing);
+        await Task.Delay(1000);
+        await telegramBotClient.SendTextMessageAsync(chatId, text, ParseMode.Html);
     }
 }

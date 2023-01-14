@@ -1,3 +1,4 @@
+using FleaMarket.Api;
 using FleaMarket.Data;
 using FleaMarket.Infrastructure.Configurations;
 using FleaMarket.Infrastructure.Telegram.Client;

@@ -2,6 +2,7 @@
 using FleaMarket.Infrastructure.Configurations;
 using FleaMarket.Infrastructure.HostedServices;
 using FleaMarket.Infrastructure.Services;
+using FleaMarket.Infrastructure.Services.MessageSender;
 using FleaMarket.Infrastructure.Telegram;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,9 @@ public static class FleaMarketConfigurator
         {
             builder.Services
                 .AddHostedServices();
+        
+            builder.Services
+                .AddSender(builder.Configuration);
         }
         
         builder.Services
