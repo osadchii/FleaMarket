@@ -1,6 +1,8 @@
 ﻿using FleaMarket.Data.Entities;
+using FleaMarket.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FleaMarket.Data;
 
@@ -8,6 +10,7 @@ public sealed class FleaMarketDatabaseContext : DbContext
 {
     public DbSet<TelegramUserEntity> TelegramUsers { get; set; }
     public DbSet<TelegramBotEntity> TelegramBots { get; set; }
+    public DbSet<LocalizedTextEntity> LocalizedTexts { get; set; }
 
     public FleaMarketDatabaseContext(DbContextOptions<FleaMarketDatabaseContext> options) : base(options)
     {
@@ -32,6 +35,21 @@ public sealed class FleaMarketDatabaseContext : DbContext
             
             entity
                 .HasIndex(x => x.OwnerId);
+        });
+
+        modelBuilder.Entity<LocalizedTextEntity>(entity =>
+        {
+            entity
+                .HasIndex(x => new { x.Language, x.LocalizedTextId })
+                .IsUnique();
+            
+            entity
+                .Property(x => x.Language)
+                .HasConversion(new EnumToStringConverter<Language>());
+            
+            entity
+                .Property(x => x.LocalizedTextId)
+                .HasConversion(new EnumToStringConverter<LocalizedTextId>());
         });
 
         base.OnModelCreating(modelBuilder);

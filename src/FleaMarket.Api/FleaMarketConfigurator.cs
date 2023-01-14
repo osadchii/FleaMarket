@@ -1,5 +1,9 @@
-﻿using FleaMarket.Infrastructure.Services;
+﻿using FleaMarket.Data;
+using FleaMarket.Infrastructure.Configurations;
+using FleaMarket.Infrastructure.HostedServices;
+using FleaMarket.Infrastructure.Services;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Serilog;
@@ -29,21 +33,37 @@ public static class FleaMarketConfigurator
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
-        
+
+        builder.Services.AddHttpClient();
+
+        builder.Services
+            .AddDbContext<FleaMarketDatabaseContext>((_, options) =>
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("Default"),
+                    contextBuilder => { contextBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); });
+            });
+
         builder.Services
             .AddServices();
+        
+        builder.Services
+            .AddHostedServices();
+
+        builder.Services
+            .Configure<ApplicationConfiguration>(builder.Configuration
+                .GetSection("Application"));
 
         builder.Host
             .UseSerilog((context, services, configuration) => configuration
-                .ReadFrom
-                .Configuration(context.Configuration)
-                .ReadFrom
-                .Services(services)
-                .Enrich
-                .FromLogContext()
-                .WriteTo
+                    .ReadFrom
+                    .Configuration(context.Configuration)
+                    .ReadFrom
+                    .Services(services)
+                    .Enrich
+                    .FromLogContext()
+                    .WriteTo
 #if DEBUG
-                .Console()
+                    .Console()
 #else
                 .Console(new Serilog.Formatting.Compact.RenderedCompactJsonFormatter())
 #endif
@@ -67,7 +87,7 @@ public static class FleaMarketConfigurator
                 {
                     endpointPattern = routeEndpoint.RoutePattern.RawText ?? string.Empty;
                 }
-                
+
                 diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
                 diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
                 diagnosticContext.Set("RoutePattern", endpointPattern);
@@ -75,10 +95,7 @@ public static class FleaMarketConfigurator
         });
 
         application.UseHsts();
-        application.UseHttpsRedirection();
-
         application.UseRouting();
-
         application.MapControllers();
 
         return application;

@@ -1,10 +1,11 @@
-﻿using FleaMarket.Infrastructure.Services;
+﻿using FleaMarket.Data.Constants;
+using FleaMarket.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot.Types;
 
 namespace FleaMarket.Api.Controllers;
 
-[Route("telegram/{token}")]
+[Route($"{ApplicationConstant.TelegramController}/{{token}}")]
 [ApiController]
 public class TelegramController : Controller
 {
