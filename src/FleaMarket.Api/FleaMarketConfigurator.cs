@@ -60,6 +60,8 @@ public static class FleaMarketConfigurator
             builder.Services
                 .AddSender(builder.Configuration);
         }
+
+        builder.Services.AddMemoryCache();
         
         builder.Services
             .AddFleaMarketTelegramBot();

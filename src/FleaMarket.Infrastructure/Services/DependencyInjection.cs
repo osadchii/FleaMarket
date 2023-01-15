@@ -1,3 +1,4 @@
+using FleaMarket.Infrastructure.Services.LocalizedText;
 using FleaMarket.Infrastructure.Services.MessageSender;
 using FleaMarket.Infrastructure.Services.UpdateHandlers;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,5 +15,7 @@ public static class DependencyInjection
 
         services.AddTransient<IMessageCommandHandler, MessageCommandHandler>();
         services.AddTransient<IMessageCommandPublisher, MessageCommandPublisher>();
+
+        services.AddTransient<ILocalizedTextService, LocalizedTextService>();
     }
 }

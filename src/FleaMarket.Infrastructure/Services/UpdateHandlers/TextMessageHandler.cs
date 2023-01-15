@@ -1,3 +1,5 @@
+using FleaMarket.Data.Enums;
+using FleaMarket.Infrastructure.Services.LocalizedText;
 using FleaMarket.Infrastructure.Services.MessageSender;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -13,11 +15,13 @@ public class TextMessageHandler : ITextMessageHandler
 {
     private readonly ILogger<TextMessageHandler> _logger;
     private readonly IMessageCommandPublisher _publisher;
+    private readonly ILocalizedTextService _localizedTextService;
 
-    public TextMessageHandler(ILogger<TextMessageHandler> logger, IMessageCommandPublisher publisher)
+    public TextMessageHandler(ILogger<TextMessageHandler> logger, IMessageCommandPublisher publisher, ILocalizedTextService localizedTextService)
     {
         _logger = logger;
         _publisher = publisher;
+        _localizedTextService = localizedTextService;
     }
 
     public async Task Handle(string token, Message message)
@@ -27,6 +31,8 @@ public class TextMessageHandler : ITextMessageHandler
         
         _logger.LogInformation("Received message with text '{Text}' from Chat with Id {Id}", text, chatId);
 
-        await _publisher.SendTextMessage(token, chatId, text);
+        var toSend = await _localizedTextService.GetText(LocalizedTextId.SelectLanguage, Language.English);
+
+        await _publisher.SendTextMessage(token, chatId, toSend);
     }
 }
