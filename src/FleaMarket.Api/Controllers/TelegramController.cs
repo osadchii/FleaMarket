@@ -1,6 +1,6 @@
 ﻿using FleaMarket.Data.Constants;
-using FleaMarket.Infrastructure.Services;
-using FleaMarket.Infrastructure.Services.UpdateHandlers;
+using FleaMarket.Infrastructure.Handlers.Telegram.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot.Types;
 
@@ -10,17 +10,18 @@ namespace FleaMarket.Api.Controllers;
 [ApiController]
 public class TelegramController : Controller
 {
-    private readonly IUpdateHandleService _updateHandleService;
+    private readonly IMediator _mediator;
 
-    public TelegramController(IUpdateHandleService updateHandleService)
+    public TelegramController(IMediator mediator)
     {
-        _updateHandleService = updateHandleService;
+        _mediator = mediator;
     }
 
     [HttpPost]
     public async Task<IActionResult> Update(string token, [FromBody] Update update)
     {
-        await _updateHandleService.Handle(token, update);
+        var command = new ApplyUpdate.Command(token, update);
+        await _mediator.Send(command);
         return Ok();
     }
 }

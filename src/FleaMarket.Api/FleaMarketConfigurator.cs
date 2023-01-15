@@ -1,5 +1,6 @@
 ﻿using FleaMarket.Data;
 using FleaMarket.Infrastructure.Configurations;
+using FleaMarket.Infrastructure.Handlers;
 using FleaMarket.Infrastructure.HostedServices;
 using FleaMarket.Infrastructure.Services;
 using FleaMarket.Infrastructure.Services.MessageSender;
@@ -61,7 +62,11 @@ public static class FleaMarketConfigurator
                 .AddSender(builder.Configuration);
         }
 
-        builder.Services.AddMemoryCache();
+        builder.Services
+            .AddMemoryCache();
+        
+        builder.Services
+            .AddMediatr();
         
         builder.Services
             .AddFleaMarketTelegramBot();
