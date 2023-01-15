@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
@@ -11,12 +10,10 @@ public interface IUpdateHandleService
 
 public class UpdateHandleService : IUpdateHandleService
 {
-    private readonly ILogger<UpdateHandleService> _logger;
     private readonly ITextMessageHandler _textMessageHandler;
 
-    public UpdateHandleService(ILogger<UpdateHandleService> logger, ITextMessageHandler textMessageHandler)
+    public UpdateHandleService(ITextMessageHandler textMessageHandler)
     {
-        _logger = logger;
         _textMessageHandler = textMessageHandler;
     }
 

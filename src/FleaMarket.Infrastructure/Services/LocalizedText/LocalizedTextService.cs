@@ -30,6 +30,7 @@ public class LocalizedTextService : ILocalizedTextService
         }
 
         value = await _databaseContext.LocalizedTexts
+            .AsNoTracking()
             .Where(x => x.LocalizedTextId == textId)
             .Where(x => x.Language == language)
             .Select(x => x.LocalizedText)
