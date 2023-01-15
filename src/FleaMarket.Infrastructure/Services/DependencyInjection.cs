@@ -17,5 +17,6 @@ public static class DependencyInjection
         services.AddTransient<IMessageCommandPublisher, MessageCommandPublisher>();
 
         services.AddTransient<ILocalizedTextService, LocalizedTextService>();
+        services.AddTransient<ITelegramUserService, TelegramUserService>();
     }
 }

@@ -57,17 +57,17 @@ public static class FleaMarketConfigurator
         {
             builder.Services
                 .AddHostedServices();
-        
+
             builder.Services
                 .AddSender(builder.Configuration);
         }
 
         builder.Services
             .AddMemoryCache();
-        
+
         builder.Services
             .AddMediatr();
-        
+
         builder.Services
             .AddFleaMarketTelegramBot();
 
@@ -76,18 +76,19 @@ public static class FleaMarketConfigurator
                 .GetSection("Application"));
 
         builder.Host
-            .UseSerilog((context, services, configuration) => configuration
-                    .ReadFrom
-                    .Configuration(context.Configuration)
-                    .ReadFrom
-                    .Services(services)
-                    .Enrich
-                    .FromLogContext()
-                    .WriteTo
+            .UseSerilog((context, services, configuration) =>
+                    configuration
+                        .ReadFrom
+                        .Configuration(context.Configuration)
+                        .ReadFrom
+                        .Services(services)
+                        .Enrich
+                        .FromLogContext()
+                        .WriteTo
 #if DEBUG
-                    .Console()
+                        .Console()
 #else
-                .Console(new Serilog.Formatting.Compact.RenderedCompactJsonFormatter())
+                        .Console(new Serilog.Formatting.Compact.RenderedCompactJsonFormatter())
 #endif
             );
 
