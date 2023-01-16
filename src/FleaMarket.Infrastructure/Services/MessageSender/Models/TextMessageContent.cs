@@ -1,7 +1,17 @@
 namespace FleaMarket.Infrastructure.Services.MessageSender.Models;
 
-public class TextMessageContent
+public class TextMessageContent : MessageCommandItemContentWithChatId
 {
-    public long ChatId { get; set; }
     public string Text { get; set; }
+
+    public TextMessageContent()
+    {
+        
+    }
+
+    public TextMessageContent(long chatId, string text)
+    {
+        ChatId = chatId;
+        Text = text;
+    }
 }

@@ -1,4 +1,3 @@
-using FleaMarket.Infrastructure.Extensions;
 using FleaMarket.Infrastructure.Services.MessageSender.Models;
 using MassTransit;
 
@@ -7,6 +6,7 @@ namespace FleaMarket.Infrastructure.Services.MessageSender;
 public interface IMessageCommandPublisher
 {
     Task SendTextMessage(string token, long chatId, string text);
+    Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons);
 }
 
 public class MessageCommandPublisher : IMessageCommandPublisher
@@ -20,24 +20,18 @@ public class MessageCommandPublisher : IMessageCommandPublisher
 
     public Task SendTextMessage(string token, long chatId, string text)
     {
-        var command = new MessageCommand
-        {
-            Token = token
-        };
+        var command = new MessageCommand(token);
+        var content = new TextMessageContent(chatId, text);
+        command.AddItem(MessageCommandItemType.Text, content);
 
-        var content = new TextMessageContent
-        {
-            ChatId = chatId,
-            Text = text
-        };
+        return _publishEndpoint.Publish(command);
+    }
 
-        var commandItem = new MessageCommandItem
-        {
-            Type = MessageCommandItemType.Text,
-            Content = content.ToJson()
-        };
-        
-        command.Items.Add(commandItem);
+    public Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
+    {
+        var command = new MessageCommand(token);
+        var content = new KeyboardMessageContent(chatId, text, buttons);
+        command.AddItem(MessageCommandItemType.Keyboard, content);
 
         return _publishEndpoint.Publish(command);
     }

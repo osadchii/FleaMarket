@@ -1,9 +1,10 @@
 ﻿using FleaMarket.Data;
 using FleaMarket.Infrastructure.Configurations;
-using FleaMarket.Infrastructure.Handlers;
+using FleaMarket.Infrastructure.ControllerHandlers;
 using FleaMarket.Infrastructure.HostedServices;
 using FleaMarket.Infrastructure.Services;
 using FleaMarket.Infrastructure.Services.MessageSender;
+using FleaMarket.Infrastructure.StateHandlers;
 using FleaMarket.Infrastructure.Telegram;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,9 @@ public static class FleaMarketConfigurator
 
         builder.Services
             .AddServices();
+        
+        builder.Services
+            .AddStateHandlers();
 
         if (builder.Environment.EnvironmentName != Environment.Test)
         {

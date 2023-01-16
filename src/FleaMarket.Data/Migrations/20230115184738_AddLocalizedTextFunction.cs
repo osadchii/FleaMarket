@@ -11,10 +11,10 @@ namespace FleaMarket.Data.Migrations
     {
         private readonly (LocalizedTextId TextId, Language Language, string value)[] Values = new[]
         {
-            (LocalizedTextId.SelectLanguage, Language.English, "Select language" +
-                                                               $"{Environment.NewLine}Выберите язык"),
-            (LocalizedTextId.SelectLanguage, Language.Russian, "Select language" +
-                                                               $"{Environment.NewLine}Выберите язык")
+            (LocalizedTextId.SelectLanguage, Language.English, "Please select an interface language" +
+                                                               $"{Environment.NewLine}Пожалуйста, выберите язык интерфейса"),
+            (LocalizedTextId.SelectLanguage, Language.Russian, "Please select an interface language" +
+                                                               $"{Environment.NewLine}Пожалуйста, выберите язык интерфейса")
         };
         
         /// <inheritdoc />

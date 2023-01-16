@@ -28,6 +28,11 @@ public class MessageCommandHandler : IMessageCommandHandler
                     var textContent = item.Content.FromJson<TextMessageContent>();
                     await _telegramBotClient.SendTextMessage(command.Token, textContent.ChatId, textContent.Text);
                     break;
+                case MessageCommandItemType.Keyboard:
+                    var keyboardContent = item.Content.FromJson<KeyboardMessageContent>();
+                    await _telegramBotClient.SendKeyboard(command.Token, keyboardContent.ChatId, keyboardContent.Text,
+                        keyboardContent.Buttons);
+                    break;
                 default:
                     continue;
             }

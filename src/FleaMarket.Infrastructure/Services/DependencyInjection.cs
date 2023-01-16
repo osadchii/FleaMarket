@@ -1,5 +1,6 @@
 using FleaMarket.Infrastructure.Services.LocalizedText;
 using FleaMarket.Infrastructure.Services.MessageSender;
+using FleaMarket.Infrastructure.Services.TelegramUserStateService;
 using FleaMarket.Infrastructure.Services.UpdateHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,5 +19,6 @@ public static class DependencyInjection
 
         services.AddTransient<ILocalizedTextService, LocalizedTextService>();
         services.AddTransient<ITelegramUserService, TelegramUserService>();
+        services.AddTransient<ITelegramUserStateService, TelegramUserStateService.TelegramUserStateService>();
     }
 }

@@ -11,6 +11,7 @@ public sealed class FleaMarketDatabaseContext : DbContext
     public DbSet<TelegramUserEntity> TelegramUsers { get; set; }
     public DbSet<TelegramBotEntity> TelegramBots { get; set; }
     public DbSet<LocalizedTextEntity> LocalizedTexts { get; set; }
+    public DbSet<TelegramUserStateEntity> TelegramUserStates { get; set; }
 
     public FleaMarketDatabaseContext(DbContextOptions<FleaMarketDatabaseContext> options) : base(options)
     {
@@ -50,6 +51,13 @@ public sealed class FleaMarketDatabaseContext : DbContext
             entity
                 .Property(x => x.LocalizedTextId)
                 .HasConversion(new EnumToStringConverter<LocalizedTextId>());
+        });
+
+        modelBuilder.Entity<TelegramUserStateEntity>(entity =>
+        {
+            entity
+                .HasIndex(x => new { x.TelegramUserId, x.TelegramBotId })
+                .IsUnique();
         });
 
         base.OnModelCreating(modelBuilder);

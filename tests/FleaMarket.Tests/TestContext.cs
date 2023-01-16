@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FleaMarket.Tests;
 
-public abstract partial class TestContext : IClassFixture<TestWebApplicationFactory>
+public abstract partial class TestContext : IClassFixture<TestWebApplicationFactory>, IDisposable
 {
     protected readonly HttpClient Client;
     protected readonly IServiceProvider Services;
@@ -23,4 +23,11 @@ public abstract partial class TestContext : IClassFixture<TestWebApplicationFact
         Guid.NewGuid().ToString().Replace("-", "") +
         Guid.NewGuid().ToString().Replace("-", "") +
         Guid.NewGuid().ToString().Replace("-", "");
+
+    public void Dispose()
+    {
+        TelegramBotClient.TextMessages.Clear();
+        TelegramBotClient.DeleteWebhookMessages.Clear();
+        TelegramBotClient.SetWebhookMessages.Clear();
+    }
 }

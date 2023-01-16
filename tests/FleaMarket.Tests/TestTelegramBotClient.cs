@@ -38,6 +38,11 @@ public class TestTelegramBotClient : IFleaMarketTelegramBotClient
         return Task.CompletedTask;
     }
 
+    public Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
+    {
+        throw new NotImplementedException();
+    }
+
     public class SetWebHookMessage
     {
         public string Token { get; set; }

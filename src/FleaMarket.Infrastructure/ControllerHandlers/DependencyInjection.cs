@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FleaMarket.Infrastructure.Handlers;
+namespace FleaMarket.Infrastructure.ControllerHandlers;
 
 public static class DependencyInjection
 {

@@ -1,5 +1,5 @@
 ﻿using FleaMarket.Data.Constants;
-using FleaMarket.Infrastructure.Handlers.Telegram.Commands;
+using FleaMarket.Infrastructure.ControllerHandlers.Telegram.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot.Types;

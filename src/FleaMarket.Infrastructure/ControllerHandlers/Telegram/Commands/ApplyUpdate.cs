@@ -2,7 +2,7 @@ using FleaMarket.Infrastructure.Services.UpdateHandlers;
 using MediatR;
 using Telegram.Bot.Types;
 
-namespace FleaMarket.Infrastructure.Handlers.Telegram.Commands;
+namespace FleaMarket.Infrastructure.ControllerHandlers.Telegram.Commands;
 
 public static class ApplyUpdate
 {
