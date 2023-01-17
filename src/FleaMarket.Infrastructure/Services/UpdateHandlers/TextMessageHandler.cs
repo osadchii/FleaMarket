@@ -2,6 +2,7 @@ using FleaMarket.Data;
 using FleaMarket.Infrastructure.Configurations;
 using FleaMarket.Infrastructure.Services.TelegramUserStateService;
 using FleaMarket.Infrastructure.StateHandlers;
+using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
 using FleaMarket.Infrastructure.StateHandlers.Management.Start;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -87,9 +88,13 @@ public class TextMessageHandler : ITextMessageHandler
         switch (telegramUserState.Name)
         {
             case nameof(StartState):
-                var handler = _serviceProvider.GetRequiredService<IStateHandler<StartState, string>>();
-                var deserializedState = handler.DeserializeStateDate(telegramUserState.StateData);
-                return handler.Handle(userId, null, deserializedState, text);
+                var startStateHandler = _serviceProvider.GetRequiredService<IStateHandler<StartState, string>>();
+                var startState = startStateHandler.DeserializeStateDate(telegramUserState.StateData);
+                return startStateHandler.Handle(userId, null, startState, text);
+            case nameof(MainMenuState):
+                var mainMenuHandler = _serviceProvider.GetRequiredService<IStateHandler<MainMenuState, string>>();
+                var mainMenuState = mainMenuHandler.DeserializeStateDate(telegramUserState.StateData);
+                return mainMenuHandler.Handle(userId, null, mainMenuState, text);
             default:
                 break;
         }

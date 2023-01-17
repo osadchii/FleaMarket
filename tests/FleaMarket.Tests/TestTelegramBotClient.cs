@@ -7,6 +7,7 @@ public class TestTelegramBotClient : IFleaMarketTelegramBotClient
     public readonly List<SetWebHookMessage> SetWebhookMessages = new();
     public readonly List<string> DeleteWebhookMessages = new();
     public readonly List<TextMessage> TextMessages = new();
+    public readonly List<KeyboardMessage> KeyboardMessages = new();
     
     public Task SetWebhook(string token, string url)
     {
@@ -40,7 +41,16 @@ public class TestTelegramBotClient : IFleaMarketTelegramBotClient
 
     public Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
     {
-        throw new NotImplementedException();
+        var message = new KeyboardMessage
+        {
+            Token = token,
+            ChatId = chatId,
+            Text = text,
+            Buttons = buttons
+        };
+        KeyboardMessages.Add(message);
+        
+        return Task.CompletedTask;
     }
 
     public class SetWebHookMessage
@@ -54,5 +64,13 @@ public class TestTelegramBotClient : IFleaMarketTelegramBotClient
         public string Token { get; set; }
         public long ChatId { get; set; }
         public string Text { get; set; }
+    }
+
+    public class KeyboardMessage
+    {
+        public string Token { get; set; }
+        public long ChatId { get; set; }
+        public string Text { get; set; }
+        public IEnumerable<IEnumerable<string>> Buttons { get; set; }
     }
 }

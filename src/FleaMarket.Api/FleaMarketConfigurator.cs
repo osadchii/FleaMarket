@@ -42,14 +42,15 @@ public static class FleaMarketConfigurator
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-        builder.Services.AddHttpClient();
-
         builder.Services
             .AddDbContext<FleaMarketDatabaseContext>((_, options) =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("Default"),
                     contextBuilder => { contextBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery); });
             });
+
+        builder.Services
+            .AddHttpClient();
 
         builder.Services
             .AddServices();

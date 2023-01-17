@@ -2,7 +2,7 @@
 
 namespace FleaMarket.Infrastructure.StateHandlers;
 
-public interface IStateHandler<TState, in TParameter>
+public interface IStateHandler<TState, in TParameter> where TState : BaseState
 {
     TState DeserializeStateDate(string stateData) => JsonConvert.DeserializeObject<TState>(stateData);
 

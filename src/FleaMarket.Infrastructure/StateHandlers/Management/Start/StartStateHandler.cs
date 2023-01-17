@@ -5,60 +5,57 @@ using FleaMarket.Infrastructure.Extensions;
 using FleaMarket.Infrastructure.Services.LocalizedText;
 using FleaMarket.Infrastructure.Services.MessageSender;
 using FleaMarket.Infrastructure.Services.TelegramUserStateService;
+using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
+using FleaMarket.Infrastructure.Telegram;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace FleaMarket.Infrastructure.StateHandlers.Management.Start;
 
-public class StartStateHandler : IStateHandler<StartState, string>
+public class StartStateHandler : BaseManagementStringStateHandler<StartState>
 {
-    private readonly ILocalizedTextService _localizedTextService;
-    private readonly IMessageCommandPublisher _messageCommandPublisher;
-    private readonly ITelegramUserStateService _telegramUserStateService;
-    private readonly FleaMarketDatabaseContext _databaseContext;
-    private readonly ApplicationConfiguration _applicationConfiguration;
-
+    private readonly IStateHandler<MainMenuState, string> _mainMenuHandler;
 
     public StartStateHandler(ILocalizedTextService localizedTextService,
         IMessageCommandPublisher messageCommandPublisher, ITelegramUserStateService telegramUserStateService,
-        FleaMarketDatabaseContext databaseContext, IOptions<ApplicationConfiguration> applicationConfiguration)
+        FleaMarketDatabaseContext databaseContext, IOptions<ApplicationConfiguration> applicationConfiguration,
+        IStateHandler<MainMenuState, string> mainMenuHandler) : base(
+        localizedTextService, messageCommandPublisher, telegramUserStateService, databaseContext,
+        applicationConfiguration)
     {
-        _localizedTextService = localizedTextService;
-        _messageCommandPublisher = messageCommandPublisher;
-        _telegramUserStateService = telegramUserStateService;
-        _databaseContext = databaseContext;
-        _applicationConfiguration = applicationConfiguration.Value;
+        _mainMenuHandler = mainMenuHandler;
     }
 
-    public async Task Handle(Guid telegramUserId, Guid? telegramBotId, StartState state, string parameter)
+    protected override async Task ExecuteHandle(Guid telegramUserId, Guid? telegramBotId, StartState state,
+        string parameter)
     {
-        var chatId = await _databaseContext.TelegramUsers
-            .Where(x => x.Id == telegramUserId)
-            .Select(x => x.ChatId)
-            .FirstOrDefaultAsync();
-        await _messageCommandPublisher.SendTextMessage(_applicationConfiguration.ManagementBot.Token, chatId, parameter);
-    }
-
-    public async Task Activate(Guid telegramUserId, Guid? telegramBotId, StartState state)
-    {
-        var chatId = await _databaseContext.TelegramUsers
-            .Where(x => x.Id == telegramUserId)
-            .Select(x => x.ChatId)
-            .FirstOrDefaultAsync();
-        
-        var userState = new TelegramUserState(nameof(StartState), new StartState().ToJson());
-        
-        var text = await _localizedTextService.GetText(LocalizedTextId.SelectLanguage, Language.English);
-        
-        var rows = new List<List<string>>();
-        var row = new List<string>
+        if (Enum.TryParse<Language>(parameter, out var language))
         {
-            Language.English.ToString(),
-            Language.Russian.ToString()
-        };
-        rows.Add(row);
+            var telegramUser = await DatabaseContext.TelegramUsers
+                .FirstOrDefaultAsync(x => x.Id == telegramUserId);
 
-        await _messageCommandPublisher.SendKeyboard(_applicationConfiguration.ManagementBot.Token, chatId, text, rows);
-        await _telegramUserStateService.SetState(telegramUserId, null, userState);
+            if (telegramUser is null)
+            {
+                return;
+            }
+
+            telegramUser.Language = language;
+            await DatabaseContext.SaveChangesAsync();
+            await _mainMenuHandler.Activate(telegramUserId, telegramBotId, new MainMenuState());
+        }
+    }
+
+    protected override async Task ExecuteActivate(Guid telegramUserId, Guid? telegramBotId, StartState state)
+    {
+        var text = await LocalizedTextService.GetText(LocalizedTextId.SelectLanguage, Language.English);
+
+        var buttons = TelegramMenuBuilder
+            .Create()
+            .AddRow()
+            .AddButton(Language.English.ToString())
+            .AddButton(Language.Russian.ToString())
+            .Build();
+
+        await MessageCommandPublisher.SendKeyboard(Token, ChatId, text, buttons);
     }
 }

@@ -26,6 +26,10 @@ public sealed class FleaMarketDatabaseContext : DbContext
             entity
                 .HasIndex(x => x.ChatId)
                 .IsUnique();
+            
+            entity
+                .Property(x => x.Language)
+                .HasConversion(new EnumToStringConverter<Language>());
         });
         
         modelBuilder.Entity<TelegramBotEntity>(entity =>
