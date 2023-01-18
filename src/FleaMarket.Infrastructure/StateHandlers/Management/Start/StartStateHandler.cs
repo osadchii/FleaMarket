@@ -1,7 +1,6 @@
 ﻿using FleaMarket.Data;
 using FleaMarket.Data.Enums;
 using FleaMarket.Infrastructure.Configurations;
-using FleaMarket.Infrastructure.Extensions;
 using FleaMarket.Infrastructure.Services.LocalizedText;
 using FleaMarket.Infrastructure.Services.MessageSender;
 using FleaMarket.Infrastructure.Services.TelegramUserStateService;
@@ -14,16 +13,12 @@ namespace FleaMarket.Infrastructure.StateHandlers.Management.Start;
 
 public class StartStateHandler : BaseManagementStringStateHandler<StartState>
 {
-    private readonly IStateHandler<MainMenuState, string> _mainMenuHandler;
-
     public StartStateHandler(ILocalizedTextService localizedTextService,
         IMessageCommandPublisher messageCommandPublisher, ITelegramUserStateService telegramUserStateService,
         FleaMarketDatabaseContext databaseContext, IOptions<ApplicationConfiguration> applicationConfiguration,
-        IStateHandler<MainMenuState, string> mainMenuHandler) : base(
-        localizedTextService, messageCommandPublisher, telegramUserStateService, databaseContext,
-        applicationConfiguration)
+        IServiceProvider services) : base(localizedTextService, messageCommandPublisher, telegramUserStateService,
+        databaseContext, applicationConfiguration, services)
     {
-        _mainMenuHandler = mainMenuHandler;
     }
 
     protected override async Task ExecuteHandle(Guid telegramUserId, Guid? telegramBotId, StartState state,
@@ -41,7 +36,7 @@ public class StartStateHandler : BaseManagementStringStateHandler<StartState>
 
             telegramUser.Language = language;
             await DatabaseContext.SaveChangesAsync();
-            await _mainMenuHandler.Activate(telegramUserId, telegramBotId, new MainMenuState());
+            await MainMenuHandler.Activate(telegramUserId, telegramBotId, new MainMenuState());
         }
     }
 

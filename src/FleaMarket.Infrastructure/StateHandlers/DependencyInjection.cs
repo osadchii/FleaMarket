@@ -1,4 +1,6 @@
-﻿using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
+﻿using FleaMarket.Infrastructure.StateHandlers.Management.AddBot;
+using FleaMarket.Infrastructure.StateHandlers.Management.AddBotConfirmation;
+using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
 using FleaMarket.Infrastructure.StateHandlers.Management.Start;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,5 +12,7 @@ public static class DependencyInjection
     {
         services.AddTransient<IStateHandler<StartState, string>, StartStateHandler>();
         services.AddTransient<IStateHandler<MainMenuState, string>, MainMenuHandler>();
+        services.AddTransient<IStateHandler<AddBotConfirmationState, string>, AddBotConfirmationHandler>();
+        services.AddTransient<IStateHandler<AddBotState, string>, AddBotHandler>();
     }
 }

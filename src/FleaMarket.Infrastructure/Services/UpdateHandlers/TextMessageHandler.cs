@@ -2,6 +2,8 @@ using FleaMarket.Data;
 using FleaMarket.Infrastructure.Configurations;
 using FleaMarket.Infrastructure.Services.TelegramUserStateService;
 using FleaMarket.Infrastructure.StateHandlers;
+using FleaMarket.Infrastructure.StateHandlers.Management.AddBot;
+using FleaMarket.Infrastructure.StateHandlers.Management.AddBotConfirmation;
 using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
 using FleaMarket.Infrastructure.StateHandlers.Management.Start;
 using Microsoft.EntityFrameworkCore;
@@ -95,6 +97,16 @@ public class TextMessageHandler : ITextMessageHandler
                 var mainMenuHandler = _serviceProvider.GetRequiredService<IStateHandler<MainMenuState, string>>();
                 var mainMenuState = mainMenuHandler.DeserializeStateDate(telegramUserState.StateData);
                 return mainMenuHandler.Handle(userId, null, mainMenuState, text);
+            case nameof(AddBotState):
+                var addBotHandler = _serviceProvider.GetRequiredService<IStateHandler<AddBotState, string>>();
+                var addBotState = addBotHandler.DeserializeStateDate(telegramUserState.StateData);
+                return addBotHandler.Handle(userId, null, addBotState, text);
+            case nameof(AddBotConfirmationState):
+                var addBotConfirmationHandler =
+                    _serviceProvider.GetRequiredService<IStateHandler<AddBotConfirmationState, string>>();
+                var addBotConfirmationState =
+                    addBotConfirmationHandler.DeserializeStateDate(telegramUserState.StateData);
+                return addBotConfirmationHandler.Handle(userId, null, addBotConfirmationState, text);
             default:
                 break;
         }

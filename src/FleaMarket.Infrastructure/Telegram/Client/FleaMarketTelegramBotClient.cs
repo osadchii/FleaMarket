@@ -28,21 +28,21 @@ public class FleaMarketTelegramBotClient : IFleaMarketTelegramBotClient
     public async Task SendTextMessage(string token, long chatId, string text)
     {
         var telegramBotClient = new TelegramBotClient(token, _httpClient);
-        await telegramBotClient.SendChatActionAsync(chatId, ChatAction.Typing);
-        await Task.Delay(1000);
         await telegramBotClient.SendTextMessageAsync(chatId, text, ParseMode.Html);
     }
 
     public async Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
     {
         var telegramBotClient = new TelegramBotClient(token, _httpClient);
-        await telegramBotClient.SendChatActionAsync(chatId, ChatAction.Typing);
-        await Task.Delay(1000);
-
         var keyboardButtons = buttons.Select(x =>
             x.Select(y => new KeyboardButton(y)));
 
-        var replyMarkup = new ReplyKeyboardMarkup(keyboardButtons);
+        var replyMarkup = new ReplyKeyboardMarkup(keyboardButtons)
+        {
+            ResizeKeyboard = true,
+            OneTimeKeyboard = true,
+            InputFieldPlaceholder = text
+        };
         await telegramBotClient.SendTextMessageAsync(chatId, text, ParseMode.Html, replyMarkup: replyMarkup);
     }
 }

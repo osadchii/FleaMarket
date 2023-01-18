@@ -6,5 +6,11 @@ public enum LocalizedTextId
     MainMenu,
     AddBotButton,
     MyBotsButton,
-    ChangeLanguageButton
+    ChangeLanguageButton,
+    SendToken,
+    Cancel,
+    Add,
+    AddBotTokenConfirmation,
+    BotAlreadyExists,
+    InvalidToken
 }

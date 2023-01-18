@@ -2,5 +2,5 @@
 
 public class MainMenuState : BaseState
 {
-    
+    public static readonly MainMenuState Default = new();
 }

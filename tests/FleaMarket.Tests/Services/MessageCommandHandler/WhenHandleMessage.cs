@@ -58,9 +58,13 @@ public class WhenHandleMessage : TestContext
             .AddButton(UniqueText)
             .AddRow()
             .AddButton(UniqueText)
-            .Build();
+            .Build()
+            .ToArray();
 
-        var allButtons = buttons.SelectMany(x => x.Select(y => y));
+        var allButtons = buttons
+            .SelectMany(x => x
+                .Select(y => y))
+            .ToArray();
 
         var content = new KeyboardMessageContent(chatId, text, buttons);
         command.AddItem(MessageCommandItemType.Keyboard, content);
