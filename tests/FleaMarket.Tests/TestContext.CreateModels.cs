@@ -1,5 +1,6 @@
 using FleaMarket.Data.Entities;
 using FleaMarket.Data.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleaMarket.Tests;
 
@@ -23,17 +24,8 @@ public partial class TestContext
         }, populate);
     }
 
-    protected Task<LocalizedTextEntity> CreateLocalizedText(Action<LocalizedTextEntity>? populate = null)
-    {
-        return CreateEntity(new LocalizedTextEntity
-        {
-            LocalizedText = UniqueText,
-            Language = Language.English,
-            LocalizedTextId = LocalizedTextId.SelectLanguage
-        }, populate);
-    }
-
-    private async Task<TEntity> CreateEntity<TEntity>(TEntity entity, Action<TEntity>? populate = null) where TEntity : BaseEntity, new()
+    private async Task<TEntity> CreateEntity<TEntity>(TEntity entity, Action<TEntity>? populate = null)
+        where TEntity : BaseEntity, new()
     {
         populate?.Invoke(entity);
         await DatabaseContext.AddAsync(entity);

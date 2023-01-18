@@ -11,5 +11,5 @@ public class TelegramUserEntity : BaseEntity
     [Required]
     public long ChatId { get; set; }
 
-    public Language Language { get; set; }
+    public Language? Language { get; set; }
 }

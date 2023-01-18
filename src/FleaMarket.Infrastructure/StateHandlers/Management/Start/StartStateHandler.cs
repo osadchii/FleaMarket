@@ -37,7 +37,10 @@ public class StartStateHandler : BaseManagementStringStateHandler<StartState>
             telegramUser.Language = language;
             await DatabaseContext.SaveChangesAsync();
             await MainMenuHandler.Activate(telegramUserId, telegramBotId, new MainMenuState());
+            return;
         }
+
+        await Activate(telegramUserId, telegramBotId, state);
     }
 
     protected override async Task ExecuteActivate(Guid telegramUserId, Guid? telegramBotId, StartState state)

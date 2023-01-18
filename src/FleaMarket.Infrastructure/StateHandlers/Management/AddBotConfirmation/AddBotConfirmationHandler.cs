@@ -8,7 +8,6 @@ using FleaMarket.Infrastructure.Services.MessageSender;
 using FleaMarket.Infrastructure.Services.TelegramUserStateService;
 using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
 using FleaMarket.Infrastructure.Telegram;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace FleaMarket.Infrastructure.StateHandlers.Management.AddBotConfirmation;

@@ -69,7 +69,7 @@ public abstract class BaseManagementStringStateHandler<TState> : IStateHandler<T
             .FirstOrDefaultAsync();
 
         ChatId = telegramUserData.ChatId;
-        Language = telegramUserData.Language;
+        Language = telegramUserData.Language ?? Language.Russian;
 
         await ExecuteActivate(telegramUserId, telegramBotId, state);
         var userStateName = state.GetType().Name;
@@ -86,6 +86,6 @@ public abstract class BaseManagementStringStateHandler<TState> : IStateHandler<T
             .FirstOrDefaultAsync();
 
         ChatId = telegramUserData.ChatId;
-        Language = telegramUserData.Language;
+        Language = telegramUserData.Language ?? Language.Russian;
     }
 }

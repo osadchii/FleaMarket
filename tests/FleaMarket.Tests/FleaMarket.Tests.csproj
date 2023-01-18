@@ -28,4 +28,8 @@
       <ProjectReference Include="..\..\src\FleaMarket.Api\FleaMarket.Api.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="StateHandlers" />
+    </ItemGroup>
+
 </Project>

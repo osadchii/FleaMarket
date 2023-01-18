@@ -25,7 +25,7 @@ public class MainMenuHandler : BaseManagementStringStateHandler<MainMenuState>
     {
         var addBotText = await LocalizedTextService.GetText(LocalizedTextId.AddBotButton, Language);
         var myBotsText = await LocalizedTextService.GetText(LocalizedTextId.MyBotsButton, Language);
-        var changeLanguage = await LocalizedTextService.GetText(LocalizedTextId.ChangeLanguageButton, Language);
+        var changeLanguageText = await LocalizedTextService.GetText(LocalizedTextId.ChangeLanguageButton, Language);
 
         if (parameter == addBotText)
         {
@@ -41,7 +41,7 @@ public class MainMenuHandler : BaseManagementStringStateHandler<MainMenuState>
         var mainMenuText = await LocalizedTextService.GetText(LocalizedTextId.MainMenu, Language);
         var addBotText = await LocalizedTextService.GetText(LocalizedTextId.AddBotButton, Language);
         var myBotsText = await LocalizedTextService.GetText(LocalizedTextId.MyBotsButton, Language);
-        var changeLanguage = await LocalizedTextService.GetText(LocalizedTextId.ChangeLanguageButton, Language);
+        var changeLanguageText = await LocalizedTextService.GetText(LocalizedTextId.ChangeLanguageButton, Language);
 
         var buttons = TelegramMenuBuilder
             .Create()
@@ -49,7 +49,7 @@ public class MainMenuHandler : BaseManagementStringStateHandler<MainMenuState>
             .AddButton(addBotText)
             .AddButton(myBotsText)
             .AddRow()
-            .AddButton(changeLanguage)
+            .AddButton(changeLanguageText)
             .Build();
 
         await MessageCommandPublisher.SendKeyboard(Token, ChatId, mainMenuText, buttons);

@@ -17,10 +17,10 @@ public class MessageCommand
         Token = token;
     }
 
-    public void AddItem(MessageCommandItemType type, MessageCommandItemContent content)
+    public void AddItem(MessageCommandItemType type, long? chatId, MessageCommandItemContent content)
     {
         var textContent = content.ToJson();
-        var item = new MessageCommandItem(type, textContent);
+        var item = new MessageCommandItem(type, chatId, textContent);
         
         Items.Add(item);
     }

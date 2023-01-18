@@ -1,5 +1,6 @@
 ﻿using FleaMarket.Data.Enums;
 using FleaMarket.Infrastructure.Services.LocalizedText;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
@@ -18,12 +19,12 @@ public class WhenGetLocalizedText : TestContext
     public async Task ShouldReturnValue()
     {
         // Arrange
-
-        var localizedText = await CreateLocalizedText(entity =>
-        {
-            entity.Language = Language.Russian;
-            entity.LocalizedTextId = LocalizedTextId.SelectLanguage;
-        });
+        
+        var text = await DatabaseContext.LocalizedTexts
+            .Where(x => x.Language == Language.Russian)
+            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
+            .Select(x => x.LocalizedText)
+            .FirstAsync();
         
         // Act
 
@@ -32,6 +33,6 @@ public class WhenGetLocalizedText : TestContext
         // Assert
         
         value.ShouldNotBeEmpty();
-        value.ShouldBe(localizedText.LocalizedText);
+        value.ShouldBe(text);
     }
 }

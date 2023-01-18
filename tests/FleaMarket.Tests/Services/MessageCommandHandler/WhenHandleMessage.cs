@@ -25,8 +25,8 @@ public class WhenHandleMessage : TestContext
         var text = UniqueText;
 
         var command = new MessageCommand(token);
-        var content = new TextMessageContent(chatId, text);
-        command.AddItem(MessageCommandItemType.Text, content);
+        var content = new TextMessageContent(text);
+        command.AddItem(MessageCommandItemType.Text, chatId, content);
 
         // Act
 
@@ -66,8 +66,8 @@ public class WhenHandleMessage : TestContext
                 .Select(y => y))
             .ToArray();
 
-        var content = new KeyboardMessageContent(chatId, text, buttons);
-        command.AddItem(MessageCommandItemType.Keyboard, content);
+        var content = new KeyboardMessageContent(text, buttons);
+        command.AddItem(MessageCommandItemType.Keyboard, chatId, content);
 
         // Act
 
@@ -103,11 +103,11 @@ public class WhenHandleMessage : TestContext
 
         var command = new MessageCommand(token);
 
-        var content1 = new TextMessageContent(chatId1, text1);
-        command.AddItem(MessageCommandItemType.Text, content1);
+        var content1 = new TextMessageContent(text1);
+        command.AddItem(MessageCommandItemType.Text, chatId1, content1);
 
-        var content2 = new TextMessageContent(chatId2, text2);
-        command.AddItem(MessageCommandItemType.Text, content2);
+        var content2 = new TextMessageContent(text2);
+        command.AddItem(MessageCommandItemType.Text, chatId2, content2);
 
         // Act
 

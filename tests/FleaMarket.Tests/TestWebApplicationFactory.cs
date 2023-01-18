@@ -3,6 +3,7 @@ using FleaMarket.Data;
 using FleaMarket.Infrastructure.Configurations;
 using FleaMarket.Infrastructure.Telegram.Client;
 using FleaMarket.Tests.Constants;
+using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -45,6 +46,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             db.Database.EnsureCreated();
 
             services.AddSingleton<IFleaMarketTelegramBotClient, TestTelegramBotClient>();
+            services.AddMassTransitTestHarness();
         });
         base.ConfigureWebHost(builder);
     }

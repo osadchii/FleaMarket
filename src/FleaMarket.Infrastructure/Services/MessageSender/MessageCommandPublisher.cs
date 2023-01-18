@@ -21,8 +21,8 @@ public class MessageCommandPublisher : IMessageCommandPublisher
     public Task SendTextMessage(string token, long chatId, string text)
     {
         var command = new MessageCommand(token);
-        var content = new TextMessageContent(chatId, text);
-        command.AddItem(MessageCommandItemType.Text, content);
+        var content = new TextMessageContent(text);
+        command.AddItem(MessageCommandItemType.Text, chatId, content);
 
         return _publishEndpoint.Publish(command);
     }
@@ -30,8 +30,8 @@ public class MessageCommandPublisher : IMessageCommandPublisher
     public Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
     {
         var command = new MessageCommand(token);
-        var content = new KeyboardMessageContent(chatId, text, buttons);
-        command.AddItem(MessageCommandItemType.Keyboard, content);
+        var content = new KeyboardMessageContent(text, buttons);
+        command.AddItem(MessageCommandItemType.Keyboard, chatId, content);
 
         return _publishEndpoint.Publish(command);
     }

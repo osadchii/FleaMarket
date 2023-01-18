@@ -3,8 +3,3 @@
 public abstract class MessageCommandItemContent
 {
 }
-
-public class MessageCommandItemContentWithChatId : MessageCommandItemContent
-{
-    public long ChatId { get; set; }
-}
