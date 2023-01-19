@@ -9,8 +9,9 @@ namespace FleaMarket.Tests.StateHandlers.Management.StartState;
 
 public static class StartStateExtensions
 {
-    public static async Task ValidateStartStateActivate(this ITestHarness harness, string text, long chatId)
+    public static async Task ValidateStartStateActivate(this TestContext testContext, ITestHarness harness, long chatId)
     {
+        var text = await testContext.GetLocalizedText(LocalizedTextId.SelectLanguage, Language.Russian);
         var published = await harness.Published.Any<MessageCommand>(message =>
             message.MessageObject is MessageCommand messageObject &&
             messageObject.Items.Any(x => x.ChatId == chatId));

@@ -1,4 +1,5 @@
-﻿using FleaMarket.Infrastructure.Extensions;
+﻿using FleaMarket.Data.Enums;
+using FleaMarket.Infrastructure.Extensions;
 using FleaMarket.Infrastructure.Services.MessageSender.Models;
 using FleaMarket.Tests.Constants;
 using MassTransit.Testing;
@@ -8,9 +9,13 @@ namespace FleaMarket.Tests.StateHandlers.Management.MainMenuState;
 
 public static class MainMenuExtensions
 {
-    public static async Task ValidateMainMenuStateActivate(this ITestHarness harness, long chatId, string mainMenuText,
-        string addBotText, string myBotsText, string changeLanguageText)
+    public static async Task ValidateMainMenuStateActivate(this TestContext testContext, ITestHarness harness, long chatId)
     {
+        var mainMenuText = await testContext.GetLocalizedText(LocalizedTextId.MainMenu, Language.Russian);
+        var addBotText = await testContext.GetLocalizedText(LocalizedTextId.AddBotButton, Language.Russian);
+        var myBotsText = await testContext.GetLocalizedText(LocalizedTextId.MyBotsButton, Language.Russian);
+        var changeLanguageText = await testContext.GetLocalizedText(LocalizedTextId.ChangeLanguageButton, Language.Russian);
+        
         var published = await harness.Published.Any<MessageCommand>(message =>
             message.MessageObject is MessageCommand messageObject &&
             messageObject.Items.Any(x => x.ChatId == chatId));

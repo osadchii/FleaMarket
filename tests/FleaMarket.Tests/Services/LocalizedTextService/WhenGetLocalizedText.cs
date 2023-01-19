@@ -20,11 +20,7 @@ public class WhenGetLocalizedText : TestContext
     {
         // Arrange
         
-        var text = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
+        var text = await GetLocalizedText(LocalizedTextId.SelectLanguage, Language.Russian);
         
         // Act
 

@@ -24,11 +24,6 @@ public class StartStateHandler : TestContext
         // Arrange
 
         var user = await CreateTelegramUser();
-        var text = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
 
         await Harness.Start();
 
@@ -39,7 +34,7 @@ public class StartStateHandler : TestContext
 
         // Assert
 
-        await Harness.ValidateStartStateActivate(text, user.ChatId);
+        await this.ValidateStartStateActivate(Harness, user.ChatId);
     }
 
     [Fact]
@@ -48,26 +43,6 @@ public class StartStateHandler : TestContext
         // Arrange
 
         var user = await CreateTelegramUser();
-        var mainMenuText = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
-        var addBotText = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
-        var myBotsText = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
-        var changeLanguageText = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
 
         await Harness.Start();
 
@@ -78,9 +53,7 @@ public class StartStateHandler : TestContext
 
         // Assert
 
-        await Harness.ValidateMainMenuStateActivate(user.ChatId, mainMenuText,
-            addBotText, myBotsText,
-            changeLanguageText);
+        await this.ValidateMainMenuStateActivate(Harness, user.ChatId);
 
         var userLanguage = await DatabaseContext.TelegramUsers
             .AsNoTracking()
@@ -98,11 +71,6 @@ public class StartStateHandler : TestContext
         // Arrange
 
         var user = await CreateTelegramUser();
-        var text = await DatabaseContext.LocalizedTexts
-            .Where(x => x.Language == Language.Russian)
-            .Where(x => x.LocalizedTextId == LocalizedTextId.SelectLanguage)
-            .Select(x => x.LocalizedText)
-            .FirstAsync();
 
         await Harness.Start();
 
@@ -113,6 +81,6 @@ public class StartStateHandler : TestContext
 
         // Assert
 
-        await Harness.ValidateStartStateActivate(text, user.ChatId);
+        await this.ValidateStartStateActivate(Harness, user.ChatId);
     }
 }
