@@ -40,6 +40,8 @@ public class AddBotConfirmationHandler : BaseManagementStringStateHandler<AddBot
         if (parameter == addText)
         {
             await AddBot(telegramUserId, state.Token);
+
+            await MessageCommandPublisher.SendTextMessage(Token, ChatId, LocalizedTextId.AddedBot, Language);
             return;
         }
 
@@ -49,7 +51,6 @@ public class AddBotConfirmationHandler : BaseManagementStringStateHandler<AddBot
     protected override async Task ExecuteActivate(Guid telegramUserId, Guid? telegramBotId,
         AddBotConfirmationState state)
     {
-        var text = await LocalizedTextService.GetText(LocalizedTextId.AddBotTokenConfirmation, Language);
         var addText = await LocalizedTextService.GetText(LocalizedTextId.Add, Language);
         var cancelText = await LocalizedTextService.GetText(LocalizedTextId.Cancel, Language);
 
@@ -60,7 +61,7 @@ public class AddBotConfirmationHandler : BaseManagementStringStateHandler<AddBot
             .AddButton(cancelText)
             .Build();
 
-        await MessageCommandPublisher.SendKeyboard(Token, ChatId, text, buttons);
+        await MessageCommandPublisher.SendKeyboard(Token, ChatId, LocalizedTextId.AddBotTokenConfirmation, Language, buttons);
     }
 
     private async Task AddBot(Guid telegramUserId, string token)

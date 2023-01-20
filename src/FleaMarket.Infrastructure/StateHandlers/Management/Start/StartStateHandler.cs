@@ -45,8 +45,6 @@ public class StartStateHandler : BaseManagementStringStateHandler<StartState>
 
     protected override async Task ExecuteActivate(Guid telegramUserId, Guid? telegramBotId, StartState state)
     {
-        var text = await LocalizedTextService.GetText(LocalizedTextId.SelectLanguage, Language.English);
-
         var buttons = TelegramMenuBuilder
             .Create()
             .AddRow()
@@ -54,6 +52,6 @@ public class StartStateHandler : BaseManagementStringStateHandler<StartState>
             .AddButton(Language.Russian.ToString())
             .Build();
 
-        await MessageCommandPublisher.SendKeyboard(Token, ChatId, text, buttons);
+        await MessageCommandPublisher.SendKeyboard(Token, ChatId, LocalizedTextId.SelectLanguage, Language.English, buttons);
     }
 }

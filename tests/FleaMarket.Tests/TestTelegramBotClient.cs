@@ -8,6 +8,7 @@ public class TestTelegramBotClient : IFleaMarketTelegramBotClient
     public readonly List<string> DeleteWebhookMessages = new();
     public readonly List<TextMessage> TextMessages = new();
     public readonly List<KeyboardMessage> KeyboardMessages = new();
+    public bool IsTokenValid { get; set; } = true;
     
     public Task SetWebhook(string token, string url)
     {
@@ -51,6 +52,11 @@ public class TestTelegramBotClient : IFleaMarketTelegramBotClient
         KeyboardMessages.Add(message);
         
         return Task.CompletedTask;
+    }
+
+    public Task<bool> TestToken(string token)
+    {
+        return Task.FromResult(IsTokenValid);
     }
 
     public class SetWebHookMessage

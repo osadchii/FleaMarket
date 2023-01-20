@@ -38,7 +38,6 @@ public class MainMenuHandler : BaseManagementStringStateHandler<MainMenuState>
 
     protected override async Task ExecuteActivate(Guid telegramUserId, Guid? telegramBotId, MainMenuState state)
     {
-        var mainMenuText = await LocalizedTextService.GetText(LocalizedTextId.MainMenu, Language);
         var addBotText = await LocalizedTextService.GetText(LocalizedTextId.AddBotButton, Language);
         var myBotsText = await LocalizedTextService.GetText(LocalizedTextId.MyBotsButton, Language);
         var changeLanguageText = await LocalizedTextService.GetText(LocalizedTextId.ChangeLanguageButton, Language);
@@ -52,6 +51,6 @@ public class MainMenuHandler : BaseManagementStringStateHandler<MainMenuState>
             .AddButton(changeLanguageText)
             .Build();
 
-        await MessageCommandPublisher.SendKeyboard(Token, ChatId, mainMenuText, buttons);
+        await MessageCommandPublisher.SendKeyboard(Token, ChatId, LocalizedTextId.MainMenu, Language, buttons);
     }
 }

@@ -12,5 +12,7 @@ public enum LocalizedTextId
     Add,
     AddBotTokenConfirmation,
     BotAlreadyExists,
-    InvalidToken
+    InvalidToken,
+    // TODO: ADD MIGRATION
+    AddedBot,
 }

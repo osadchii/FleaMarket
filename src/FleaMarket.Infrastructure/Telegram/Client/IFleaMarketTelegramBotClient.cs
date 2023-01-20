@@ -6,4 +6,5 @@ public interface IFleaMarketTelegramBotClient
     Task DeleteWebhook(string token);
     Task SendTextMessage(string token, long chatId, string text);
     Task SendKeyboard(string token, long chatId, string text, IEnumerable<IEnumerable<string>> buttons);
+    Task<bool> TestToken(string token);
 }

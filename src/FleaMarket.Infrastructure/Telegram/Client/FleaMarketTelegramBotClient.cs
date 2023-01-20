@@ -45,4 +45,10 @@ public class FleaMarketTelegramBotClient : IFleaMarketTelegramBotClient
         };
         await telegramBotClient.SendTextMessageAsync(chatId, text, ParseMode.Html, replyMarkup: replyMarkup);
     }
+
+    public Task<bool> TestToken(string token)
+    {
+        var telegramBotClient = new TelegramBotClient(token, _httpClient);
+        return telegramBotClient.TestApiAsync();
+    }
 }

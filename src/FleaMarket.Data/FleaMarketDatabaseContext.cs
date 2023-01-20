@@ -12,6 +12,8 @@ public sealed class FleaMarketDatabaseContext : DbContext
     public DbSet<TelegramBotEntity> TelegramBots { get; set; }
     public DbSet<LocalizedTextEntity> LocalizedTexts { get; set; }
     public DbSet<TelegramUserStateEntity> TelegramUserStates { get; set; }
+    public DbSet<TelegramChannelEntity> TelegramChannels { get; set; }
+    public DbSet<TelegramBotChannelMappingEntity> TelegramBotChannelMappings { get; set; }
 
     public FleaMarketDatabaseContext(DbContextOptions<FleaMarketDatabaseContext> options) : base(options)
     {
@@ -26,18 +28,18 @@ public sealed class FleaMarketDatabaseContext : DbContext
             entity
                 .HasIndex(x => x.ChatId)
                 .IsUnique();
-            
+
             entity
                 .Property(x => x.Language)
                 .HasConversion(new EnumToStringConverter<Language>());
         });
-        
+
         modelBuilder.Entity<TelegramBotEntity>(entity =>
         {
             entity
                 .HasIndex(x => x.Token)
                 .IsUnique();
-            
+
             entity
                 .HasIndex(x => x.OwnerId);
         });
@@ -47,11 +49,11 @@ public sealed class FleaMarketDatabaseContext : DbContext
             entity
                 .HasIndex(x => new { x.Language, x.LocalizedTextId })
                 .IsUnique();
-            
+
             entity
                 .Property(x => x.Language)
                 .HasConversion(new EnumToStringConverter<Language>());
-            
+
             entity
                 .Property(x => x.LocalizedTextId)
                 .HasConversion(new EnumToStringConverter<LocalizedTextId>());
@@ -61,6 +63,20 @@ public sealed class FleaMarketDatabaseContext : DbContext
         {
             entity
                 .HasIndex(x => new { x.TelegramUserId, x.TelegramBotId })
+                .IsUnique();
+        });
+
+        modelBuilder.Entity<TelegramChannelEntity>(entity =>
+        {
+            entity
+                .HasIndex(x => x.ChatId)
+                .IsUnique();
+        });
+
+        modelBuilder.Entity<TelegramBotChannelMappingEntity>(entity =>
+        {
+            entity
+                .HasIndex(x => new { x.TelegramBotId, x.TelegramChannelId })
                 .IsUnique();
         });
 

@@ -12,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddTransient<IUpdateHandleService, UpdateHandleService>();
         services.AddTransient<ITextMessageHandler, TextMessageHandler>();
+        services.AddTransient<IMyChatMemberHandler, MyChatMemberHandler>();
         services.AddTransient<IWebhookService, WebhookService>();
 
         services.AddTransient<IMessageCommandHandler, MessageCommandHandler>();

@@ -8,6 +8,7 @@ using FleaMarket.Infrastructure.Services.TelegramUserStateService;
 using FleaMarket.Infrastructure.StateHandlers.Management.AddBotConfirmation;
 using FleaMarket.Infrastructure.StateHandlers.Management.MainMenu;
 using FleaMarket.Infrastructure.Telegram;
+using FleaMarket.Infrastructure.Telegram.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -16,15 +17,17 @@ namespace FleaMarket.Infrastructure.StateHandlers.Management.AddBot;
 public class AddBotHandler : BaseManagementStringStateHandler<AddBotState>
 {
     private readonly IWebhookService _webhookService;
+    private readonly IFleaMarketTelegramBotClient _telegramBotClient;
 
     public AddBotHandler(ILocalizedTextService localizedTextService, IMessageCommandPublisher messageCommandPublisher,
         ITelegramUserStateService telegramUserStateService, FleaMarketDatabaseContext databaseContext,
         IOptions<ApplicationConfiguration> applicationConfiguration, IServiceProvider services,
-        IWebhookService webhookService) : base(
+        IWebhookService webhookService, IFleaMarketTelegramBotClient telegramBotClient) : base(
         localizedTextService, messageCommandPublisher, telegramUserStateService, databaseContext,
         applicationConfiguration, services)
     {
         _webhookService = webhookService;
+        _telegramBotClient = telegramBotClient;
     }
 
     protected override async Task ExecuteHandle(Guid telegramUserId, Guid? telegramBotId, AddBotState state,
@@ -42,8 +45,7 @@ public class AddBotHandler : BaseManagementStringStateHandler<AddBotState>
 
         if (botAlreadyExists)
         {
-            var botAlreadyExistsText = await LocalizedTextService.GetText(LocalizedTextId.BotAlreadyExists, Language);
-            await MessageCommandPublisher.SendTextMessage(Token, ChatId, botAlreadyExistsText);
+            await MessageCommandPublisher.SendTextMessage(Token, ChatId, LocalizedTextId.BotAlreadyExists, Language);
             await Activate(telegramUserId, telegramBotId, state);
             return;
         }
@@ -52,8 +54,7 @@ public class AddBotHandler : BaseManagementStringStateHandler<AddBotState>
 
         if (!tokenIsValid)
         {
-            var invalidTokenText = await LocalizedTextService.GetText(LocalizedTextId.InvalidToken, Language);
-            await MessageCommandPublisher.SendTextMessage(Token, ChatId, invalidTokenText);
+            await MessageCommandPublisher.SendTextMessage(Token, ChatId, LocalizedTextId.InvalidToken, Language);
             await Activate(telegramUserId, telegramBotId, state);
             return;
         }
@@ -68,7 +69,6 @@ public class AddBotHandler : BaseManagementStringStateHandler<AddBotState>
 
     protected override async Task ExecuteActivate(Guid telegramUserId, Guid? telegramBotId, AddBotState state)
     {
-        var sendTokenText = await LocalizedTextService.GetText(LocalizedTextId.SendToken, Language);
         var cancelText = await LocalizedTextService.GetText(LocalizedTextId.Cancel, Language);
         var buttons = TelegramMenuBuilder
             .Create()
@@ -76,7 +76,7 @@ public class AddBotHandler : BaseManagementStringStateHandler<AddBotState>
             .AddButton(cancelText)
             .Build();
 
-        await MessageCommandPublisher.SendKeyboard(Token, ChatId, sendTokenText, buttons);
+        await MessageCommandPublisher.SendKeyboard(Token, ChatId, LocalizedTextId.SendToken, Language, buttons);
     }
 
     private async Task<bool> BotAlreadyExists(string token)
@@ -91,9 +91,8 @@ public class AddBotHandler : BaseManagementStringStateHandler<AddBotState>
     {
         try
         {
-            await _webhookService.SetWebhook(token);
-            await _webhookService.DeleteWebhook(token);
-            return true;
+            var result = await _telegramBotClient.TestToken(token);
+            return result;
         }
         catch
         {

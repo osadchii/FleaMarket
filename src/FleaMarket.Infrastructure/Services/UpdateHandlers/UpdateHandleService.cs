@@ -11,10 +11,12 @@ public interface IUpdateHandleService
 public class UpdateHandleService : IUpdateHandleService
 {
     private readonly ITextMessageHandler _textMessageHandler;
+    private readonly IMyChatMemberHandler _myChatMemberHandler;
 
-    public UpdateHandleService(ITextMessageHandler textMessageHandler)
+    public UpdateHandleService(ITextMessageHandler textMessageHandler, IMyChatMemberHandler myChatMemberHandler)
     {
         _textMessageHandler = textMessageHandler;
+        _myChatMemberHandler = myChatMemberHandler;
     }
 
     public Task Handle(string token, Update update)
@@ -22,6 +24,7 @@ public class UpdateHandleService : IUpdateHandleService
         return update.Type switch
         {
             UpdateType.Message => _textMessageHandler.Handle(token, update.Message),
+            UpdateType.MyChatMember => _myChatMemberHandler.Handle(token, update.MyChatMember),
             _ => Task.CompletedTask
         };
     }
