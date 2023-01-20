@@ -12,7 +12,7 @@ public abstract partial class TestContext : IClassFixture<TestWebApplicationFact
     protected readonly IServiceProvider Services;
     protected readonly TestTelegramBotClient TelegramBotClient;
     protected readonly FleaMarketDatabaseContext DatabaseContext;
-    protected ITestHarness Harness { get; }
+    public ITestHarness Harness { get; }
 
     protected TestContext(TestWebApplicationFactory factory)
     {

@@ -25,8 +25,6 @@ public class StartStateHandler : TestContext
 
         var user = await CreateTelegramUser();
 
-        await Harness.Start();
-
         // Act
 
         await _startStateHandler.Activate(user.Id, null,
@@ -34,7 +32,7 @@ public class StartStateHandler : TestContext
 
         // Assert
 
-        await this.ValidateStartStateActivate(Harness, user.ChatId);
+        await this.ValidateStartStateActivate(user.ChatId);
     }
 
     [Fact]
@@ -44,8 +42,6 @@ public class StartStateHandler : TestContext
 
         var user = await CreateTelegramUser();
 
-        await Harness.Start();
-
         // Act
 
         await _startStateHandler.Handle(user.Id, null, new Infrastructure.StateHandlers.Management.Start.StartState(),
@@ -53,7 +49,7 @@ public class StartStateHandler : TestContext
 
         // Assert
 
-        await this.ValidateMainMenuStateActivate(Harness, user.ChatId);
+        await this.ValidateMainMenuStateActivate(user.ChatId);
 
         var userLanguage = await DatabaseContext.TelegramUsers
             .AsNoTracking()
@@ -72,8 +68,6 @@ public class StartStateHandler : TestContext
 
         var user = await CreateTelegramUser();
 
-        await Harness.Start();
-
         // Act
 
         await _startStateHandler.Handle(user.Id, null, new Infrastructure.StateHandlers.Management.Start.StartState(),
@@ -81,6 +75,6 @@ public class StartStateHandler : TestContext
 
         // Assert
 
-        await this.ValidateStartStateActivate(Harness, user.ChatId);
+        await this.ValidateStartStateActivate(user.ChatId);
     }
 }

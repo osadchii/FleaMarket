@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FleaMarket.Data.Entities;
 using FleaMarket.Infrastructure.Services;
 using FleaMarket.Tests.Constants;
@@ -16,6 +17,8 @@ public class WhenDeleteWebhooks : TestContext
     }
 
     [Fact]
+    [SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
+    [SuppressMessage("ReSharper.DPA", "DPA0007: Large number of DB records", MessageId = "count: 22672")]
     public async Task ShouldBeDeleted()
     {
         // Arrange

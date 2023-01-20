@@ -9,15 +9,15 @@ namespace FleaMarket.Tests.StateHandlers.Management.StartState;
 
 public static class StartStateExtensions
 {
-    public static async Task ValidateStartStateActivate(this TestContext testContext, ITestHarness harness, long chatId)
+    public static async Task ValidateStartStateActivate(this TestContext testContext, long chatId)
     {
         var text = await testContext.GetLocalizedText(LocalizedTextId.SelectLanguage, Language.Russian);
-        var published = await harness.Published.Any<MessageCommand>(message =>
+        var published = await testContext.Harness.Published.Any<MessageCommand>(message =>
             message.MessageObject is MessageCommand messageObject &&
             messageObject.Items.Any(x => x.ChatId == chatId));
         published.ShouldBeTrue();
 
-        var message = await harness.Published.SelectAsync<MessageCommand>(message =>
+        var message = await testContext.Harness.Published.SelectAsync<MessageCommand>(message =>
             message.MessageObject is MessageCommand messageObject &&
             messageObject.Items.Any(x => x.ChatId == chatId)).First();
         message.ShouldNotBeNull();
