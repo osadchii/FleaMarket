@@ -15,4 +15,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file /src/FleaMarket.ApiDockerfile --tag my-image-name:$(date +%s)
+        run: docker build . --file /src/FleaMarket.Api/Dockerfile --tag my-image-name:$(date +%s)
