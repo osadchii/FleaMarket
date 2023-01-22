@@ -1,14 +1,14 @@
 name: dotnet package
 
-on: [push]
+on: [ push ]
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['7.0.x' ]
+        dotnet-version: [ '7.0.x' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -22,3 +22,12 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+
+  docker:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build . --file ./src/FleaMarket.Api/Dockerfile --tag my-image-name:$(date +%s)
