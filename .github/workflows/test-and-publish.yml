@@ -1,4 +1,4 @@
-name: FleaMarket Tests1
+name: FleaMarket Tests
 
 on:
   schedule:
