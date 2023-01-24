@@ -20,6 +20,7 @@ public static class DependencyInjection
 
         services.AddTransient<ILocalizedTextService, LocalizedTextService>();
         services.AddTransient<ITelegramUserService, TelegramUserService>();
+        services.AddTransient<ITelegramChannelService, TelegramChannelService>();
         services.AddTransient<ITelegramUserStateService, TelegramUserStateService.TelegramUserStateService>();
     }
 }

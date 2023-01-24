@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FleaMarket.Data.Constants;
 
 namespace FleaMarket.Data.Entities;
 
+[Table(DatabaseName.TelegramBotChannelMapping, Schema = DatabaseName.DefaultSchema)]
 public class TelegramBotChannelMappingEntity : BaseEntity
 {
     [Required]
